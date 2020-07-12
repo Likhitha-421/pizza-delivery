@@ -1,15 +1,17 @@
 <template>
     <div>
         <menu-foods/>
+        <other-items />
     </div>
 </template>
 
 <script>
     import MenuFoods from './menu'
+    import OtherItems from './other'
     export default {
         name: "Home",
         components: {
-            MenuFoods
+            MenuFoods, OtherItems
         }
     }
 </script>

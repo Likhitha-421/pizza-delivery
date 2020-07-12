@@ -1,6 +1,6 @@
 <template>
     <div class="app-container">
-        <h2 style="text-align: left; margin-bottom: 20px; color: #ff6900;">Pizzas</h2>
+        <h2 style="text-align: left; margin-bottom: 20px; color: #ff6900;">Other Items</h2>
         <el-row>
             <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" v-for="(item, index) in items" :key="index">
                 <div class="grid-content">
@@ -91,7 +91,7 @@
 
 <script>
     export default {
-        name: "MenuFoods",
+        name: "OtherItems",
         data() {
             return {
                 centerDialogVisible: false,
@@ -105,46 +105,32 @@
                 items: [
                     {
                         id: 1,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/5e347c8e1c8b4bc79cb16b683b113cc4_292x292.jpeg',
-                        name: 'Halved Pizza',
-                        price: '30',
-                        miniDescription: 'Collect your 35 cm pizza with two different flavors',
+                        img: 'https://cdn.dodostatic.net/static/Img/Products/ed6c0e7f280846c782fd58b24288474c_292x292.jpeg',
+                        name: 'Cappuccino Coffee',
+                        price: '10',
+                        miniDescription: 'Espresso hot drink with frothed milk, 0.4 L',
                     },
                     {
                         id: 2,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/2925a332340d4d85ba913d99b34d651a_292x292.jpeg',
-                        name: 'Vegetables and mushrooms',
+                        img: 'https://cdn.dodostatic.net/static/Img/Products/Drinks/ru-RU/cf19422f-7b3a-4220-a9bf-49787f7e2dac.jpg',
+                        name: 'Coca-cola',
                         price: '45',
-                        miniDescription: 'Chicken, mozzarella, pineapple, tomato sauce',
+                        miniDescription: '1.5 L',
                     },
                     {
                         id: 3,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/Pizza/ru-RU/d5f51ef8-66d7-468d-83f2-d8cad5f4989e.jpg',
-                        name: 'Pizza Pie',
+                        img: 'https://cdn.dodostatic.net/static/Img/Products/25cfbe54b782402f964a41be6417bea6_292x292.jpeg',
+                        name: 'Sprite',
                         price: '55',
-                        miniDescription: 'Oregano, pepperoni, mozzarella cheese, champignons, sliced olives, tomato sauce',
+                        miniDescription: '1 L',
                     },
                     {
                         id: 4,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/Pizza/ru-RU/5998fb51-0b03-4602-8395-fdb5a201cb3a.jpg',
-                        name: 'Hawaiian',
+                        img: 'https://cdn.dodostatic.net/static/Img/Products/be55eb49702e46289514998a88028c4f_292x292.jpeg',
+                        name: 'Coffee "Americano',
                         price: '35',
-                        miniDescription: 'Pickles, tomatoes, red onions, mozzarella, minced beef, cheese sauce',
-                    },
-                    {
-                        id: 5,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/Pizza/ru-RU/421a622d-4ad3-47db-86a0-f85f19c4b63c.jpg',
-                        name: 'Pepperoni',
-                        price: '25',
-                        miniDescription: 'Tomato sauce, mozzarella, pepperoni',
-                    },
-                    {
-                        id: 6,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/Pizza/ru-RU/c9d27391-4f6b-42d0-a821-dc72f65e789e.jpg',
-                        name: 'Pizaa name',
-                        price: '25',
-                        miniDescription: 'Beef, olives, red onions, mozzarella, ham, pepperoni, bell peppers, champignons, tomato sauce Beef, olives, red onions, mozzarella, ham, pepperoni, bell peppers, champignons, tomato sauce',
-                    },
+                        miniDescription: 'Espresso hot drink, 0.3 L',
+                    }
                 ]
             }
         }

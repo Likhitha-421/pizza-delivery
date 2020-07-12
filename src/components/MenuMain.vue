@@ -1,13 +1,15 @@
 <template>
     <el-menu :default-active="activeIndex" style="margin-bottom: 10px;" class="app-container el-menu-demo" mode="horizontal" @select="handleSelect">
-        <el-menu-item index="1"><i class="el-icon-orange"></i> Menu pizzas</el-menu-item>
-        <el-menu-item index="2"><i class="el-icon-coffee"></i> Other Items</el-menu-item>
-        <el-menu-item index="3"><a href="#"><i class="el-icon-sold-out"></i>My Orders</a></el-menu-item>
-        <el-submenu index="4">
-            <template slot="title"><i class="el-icon-info"></i> About Service</template>
-            <el-menu-item index="2-1"><i class="el-icon-truck"></i> About Delivery</el-menu-item>
-            <el-menu-item index="2-2"><i class="el-icon-truck"></i> Payment</el-menu-item>
-            <el-menu-item index="2-3"><i class="el-icon-fork-spoon"></i> About our Restaurants</el-menu-item>
+        <el-menu-item index="1" class="menu-items"><i class="el-icon-orange menu-items"></i> Menu pizzas</el-menu-item>
+        <el-menu-item index="2" class="menu-items"><i class="el-icon-coffee menu-items"></i> Other Items</el-menu-item>
+        <el-menu-item index="3" class="menu-items"><a href="#"><i class="el-icon-sold-out menu-items"></i>My Orders</a></el-menu-item>
+        <el-submenu index="4" class="menu-items">
+            <template slot="title"><i class="el-icon-info menu-items"></i>
+                <span class="menu-items">About Service</span>
+            </template>
+            <el-menu-item index="2-1" class="menu-items"><i class="el-icon-truck menu-items"></i> About Delivery</el-menu-item>
+            <el-menu-item index="2-2" class="menu-items"><i class="el-icon-truck menu-items"></i> Payment</el-menu-item>
+            <el-menu-item index="2-3" class="menu-items"><i class="el-icon-fork-spoon menu-items"></i> About our Restaurants</el-menu-item>
         </el-submenu>
         <div class="right-elements">
             <button class="cart-button"><i class="el-icon-shopping-cart-2"></i> Cart</button>
@@ -25,6 +27,9 @@
 <style scoped>
         .app-container {
             padding: 0 10% 0 10%;
+        }
+        .menu-items {
+            color: #ff6900 !important;
         }
         .right-elements {
             float: right;
