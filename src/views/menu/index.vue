@@ -1,5 +1,6 @@
 <template>
-    <div class="app-container" style="">
+    <div class="app-container">
+        <h2 style="text-align: left; margin-bottom: 20px;">Pizzas</h2>
         <el-row>
             <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" v-for="(item, index) in items" :key="index">
                 <div class="grid-content">
@@ -28,12 +29,62 @@
                             </span>
                             </div>
                             <div class="pizza-select">
-                                <el-button type="success" round>Select</el-button>
+                                <el-button type="success" @click="centerDialogVisible = true" round>Select</el-button>
                             </div>
                         </footer>
                     </article>
                 </div>
             </el-col>
+        </el-row>
+        <el-row>
+            <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
+                <div class="grid-content bg-purple-dark">
+                    <el-dialog
+                            title="Pizza Pie"
+                            :visible.sync="centerDialogVisible"
+                            width="60%"
+                            center>
+                        <el-row>
+                            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12" style="text-align: center;">
+                                <div>
+                                    <figure class="pizza-image">
+                                        <img
+                                                src="https://cdn.dodostatic.net/static/Img/Products/5e347c8e1c8b4bc79cb16b683b113cc4_292x292.jpeg"
+                                                height="292"
+                                                alt=""
+                                                type="1"
+                                                data-ll-status="loaded"
+                                        />
+                                    </figure>
+                                </div>
+                            </el-col>
+                            <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+                                <div>
+                                    <h3>Pizza Pie</h3>
+                                    <br>
+                                    <span>It should be noted that the content will not be aligned in center by default</span>
+                                    <br>
+                                    <div><strong>Price:</strong> {{ 34 }} USD</div>
+                                    <br>
+                                    <el-radio-group class="size-select" v-model="form.labelSize" size="small">
+                                        <el-radio-button label="small">Small</el-radio-button>
+                                        <el-radio-button label="middle">Middle</el-radio-button>
+                                        <el-radio-button label="big">Big</el-radio-button>
+                                    </el-radio-group>
+                                    <br>
+                                    <el-input-number v-model="form.selectedItem" @change="handleChange" :min="1" :max="10"></el-input-number>
+                                    <p><strong>Total price:</strong> {{ totalPrice }} &nbsp; {{ currency }}</p>
+                                </div>
+                            </el-col>
+                        </el-row>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="centerDialogVisible = false"><i class="el-icon-close" /> Cancel</el-button>
+                            <el-button type="primary" @click="centerDialogVisible = false"><i class="el-icon-plus" /> Add to Shopping Cart</el-button>
+                        </span>
+                    </el-dialog>
+                </div>
+            </el-col>
+
         </el-row>
     </div>
 </template>
@@ -43,6 +94,14 @@
         name: "MenuFoods",
         data() {
             return {
+                centerDialogVisible: false,
+                totalPrice: 0,
+                bufferCart: {},
+                currency: 'USD',
+                form: {
+                    selectedItem: 1,
+                    labelSize: 'middle'
+                },
                 items: [
                     {
                         id: 1,
@@ -94,7 +153,7 @@
 
 <style scoped>
     .app-container {
-        padding: 10% 300px 20px 10%;
+        padding: 50px 10% 50px 10%;
     }
     .item-article {
         display: flex;
@@ -109,18 +168,6 @@
         margin: 10px;
         padding: 3px;
     }
-    .el-col {
-        border-radius: 4px;
-    }
-    .bg-purple-dark {
-        background: #99a9bf;
-    }
-    .bg-purple {
-        background: #d3dce6;
-    }
-    .bg-purple-light {
-        background: #e5e9f2;
-    }
     .grid-content {
         border-radius: 4px;
         min-height: 36px;
@@ -130,7 +177,6 @@
         font-size: 14px;
         line-height: 20px;
         height: 383px;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         color: rgb(115, 121, 140);
         font-weight: 400;
         margin: 0px;
@@ -187,5 +233,8 @@
         border-style: solid;
         border-color: rgb(255, 105, 0);
         border-image: initial;
+    }
+    .size-select {
+        margin: 15px 0 15px 0;
     }
 </style>
