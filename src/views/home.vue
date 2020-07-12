@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div style="margin-top: 60px">
+            <slider-main/>
+        </div>
         <menu-foods/>
         <other-items />
     </div>
@@ -7,11 +10,12 @@
 
 <script>
     import MenuFoods from './menu'
-    import OtherItems from './other'
+    import OtherItems from './menu/other'
+    import SliderMain from '../components/SliderMain'
     export default {
         name: "Home",
         components: {
-            MenuFoods, OtherItems
+            MenuFoods, OtherItems, SliderMain
         }
     }
 </script>

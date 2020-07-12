@@ -12,7 +12,7 @@
             <el-menu-item index="2-3" class="menu-items"><i class="el-icon-fork-spoon menu-items"></i> About our Restaurants</el-menu-item>
         </el-submenu>
         <div class="right-elements">
-            <button class="cart-button"><i class="el-icon-shopping-cart-2"></i> Cart</button>
+            <button class="cart-button" @click="handleCart"><i class="el-icon-shopping-cart-2"></i> Cart</button>
             <button class="cart-button"><i class="el-icon-user"></i> Account</button>
         </div>
     </el-menu>
@@ -20,7 +20,12 @@
 
 <script>
     export default {
-        name: "MenuMain"
+        name: "MenuMain",
+        methods: {
+            handleCart() {
+                this.$router.push({ path: '/cart' })
+            }
+        }
     }
 </script>
 
@@ -29,7 +34,7 @@
             padding: 0 10% 0 10%;
         }
         .menu-items {
-            color: #ff6900 !important;
+            /*color: #ff6900 !important;*/
         }
         .right-elements {
             float: right;

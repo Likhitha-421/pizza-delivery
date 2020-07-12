@@ -1,5 +1,5 @@
 <template>
-    <el-footer style="background-color: chocolate; color: #ffffff;">
+    <el-footer style="width:100%; background-color: chocolate; color: #ffffff; position: absolute;">
         <br>
         <div style="text-align: center; font-size: small;">
             Copyright 2020 <span>Achilov Davronbek</span>

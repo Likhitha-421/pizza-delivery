@@ -30,7 +30,7 @@ export const constantRoutes = [
   {
     path: '/menu',
     component: Layout,
-    redirect: '/menu/list',
+    redirect: '/menu',
     name: 'Menu',
     meta: {
       title: 'Menu',
@@ -42,6 +42,24 @@ export const constantRoutes = [
         component: () => import('@/views/menu/index'),
         name: 'MenuFoods',
         meta: { title: 'Menu', icon: 'edit' }
+      },
+    ]
+  },
+  {
+    path: '/cart',
+    component: Layout,
+    redirect: '/cart',
+    name: 'Cart',
+    meta: {
+      title: 'Cart',
+      icon: 'example'
+    },
+    children: [
+      {
+        path: '/',
+        component: () => import('@/views/cart/index'),
+        name: 'Cart',
+        meta: { title: 'Cart', icon: 'edit' }
       },
     ]
   }
