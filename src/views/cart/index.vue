@@ -1,5 +1,15 @@
 <template>
     <div style="min-height: 100vh;">
+        <div v-if="this.$route.name === 'Cart'" style="margin: 65px 0 25px 0;">
+            <p align="center">
+                <el-steps :active="1" style="width: 30%;">
+                    <el-step title="Step 1" icon="el-icon-shopping-cart-full" description="Cart"></el-step>
+                    <el-step title="Step 2" icon="el-icon-document-checked" description="Order"></el-step>
+                    <el-step title="Step 3" icon="el-icon-truck" description="Delivery"></el-step>
+                    <el-step title="Step 4" icon="el-icon-circle-check" description="Order is accepted"></el-step>
+                </el-steps>
+            </p>
+        </div>
         <main class="cart-item">
             <div class="top-cart"></div>
             <section class="cart-section">
