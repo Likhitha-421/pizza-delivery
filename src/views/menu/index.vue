@@ -1,20 +1,14 @@
 <template>
-    <div class="app-container" style="padding: 40px 300px 20px 300px;">
+    <div class="app-container" style="">
         <el-row>
-            <el-col :xs="24" :sm="8" :md="8" :lg="6" :xl="6" v-for="(item, index) in items" :key="index">
+            <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" v-for="(item, index) in items" :key="index">
                 <div class="grid-content">
-                    <article style="display: flex;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
-    margin-bottom: 60px;
-    width: 292px;
-    margin-right: 37.3333px;
-    flex-flow: column;">
+                    <article class="item-article">
                         <main class="main-item">
                             <figure class="pizza-image">
                                 <img
                                         :src="item.img"
-                                        class="lazy image loaded"
+                                        height="292"
                                         :alt="item.name"
                                         :title="item.name"
                                         type="1"
@@ -22,13 +16,15 @@
                                 />
                             </figure>
                             <h2 class="product-title">{{ item.name }}</h2>
-                            {{ item.miniDescription }}
+                            <span>
+                                {{ item.miniDescription }}
+                            </span>
                         </main>
-                        <footer class="pizza-footer">
+                        <footer class="pizza-footer" style="background-color: #ffffff;">
                             <div class="price-item">
-                                от <span class="money">
-                                <span class="money__value">{{ item.price }}</span>
-                                <span class="money__currency money__currency_on-the-right"> USD</span>
+                                from <span class="money">
+                                <span class="value">{{ item.price }}</span>
+                                <span class="on-the-right"> USD</span>
                             </span>
                             </div>
                             <div class="pizza-select">
@@ -88,7 +84,7 @@
                         img: 'https://cdn.dodostatic.net/static/Img/Products/Pizza/ru-RU/c9d27391-4f6b-42d0-a821-dc72f65e789e.jpg',
                         name: 'Pizaa name',
                         price: '25',
-                        miniDescription: 'Beef, olives, red onions, mozzarella, ham, pepperoni, bell peppers, champignons, tomato sauce',
+                        miniDescription: 'Beef, olives, red onions, mozzarella, ham, pepperoni, bell peppers, champignons, tomato sauce Beef, olives, red onions, mozzarella, ham, pepperoni, bell peppers, champignons, tomato sauce',
                     },
                 ]
             }
@@ -97,6 +93,18 @@
 </script>
 
 <style scoped>
+    .app-container {
+        padding: 10% 300px 20px 10%;
+    }
+    .item-article {
+        display: flex;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+        margin-bottom: 60px;
+        width: 292px;
+        margin-right: 37.3333px;
+        flex-flow: column;
+    }
     .grid-content {
         margin: 10px;
         padding: 3px;
@@ -121,10 +129,16 @@
         width: 100%;
         font-size: 14px;
         line-height: 20px;
+        height: 383px;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         color: rgb(115, 121, 140);
         font-weight: 400;
         margin: 0px;
+    }
+    .main-item span{
+        overflow: hidden;
+        white-space: pre-line;
+
     }
     .main-item h2 {
         color: rgb(0, 0, 0);
