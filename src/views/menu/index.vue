@@ -49,7 +49,7 @@
                                 <div>
                                     <figure class="pizza-image">
                                         <img
-                                                :src="modalItem.img"
+                                                :src="form.img"
                                                 height="292"
                                                 alt=""
                                                 type="1"
@@ -60,17 +60,17 @@
                             </el-col>
                             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                                 <div>
-                                    <h3>{{ modalItem.name }}</h3>
+                                    <h3>{{ form.name }}</h3>
                                     <br>
-                                    <span>{{ modalItem.title }}</span>
-                                    <p>{{ modalItem.description }}</p>
+                                    <span>{{ form.title }}</span>
+                                    <p>{{ form.description }}</p>
                                     <br>
-                                    <div><strong>Price:</strong> {{ getCurrentPrice(modalItem.prices) }} {{ selectedCurrency }}</div>
+                                    <div><strong>Price:</strong> {{ getCurrentPrice(form.prices) }} {{ selectedCurrency }}</div>
                                     <br>
                                     <el-radio-group class="size-select" v-model="form.type" size="small">
-                                        <el-radio-button label="small">Small</el-radio-button>
-                                        <el-radio-button label="middle">Middle</el-radio-button>
-                                        <el-radio-button label="big">Big</el-radio-button>
+                                        <el-radio-button label="1">Small</el-radio-button>
+                                        <el-radio-button label="2">Middle</el-radio-button>
+                                        <el-radio-button label="3">Big</el-radio-button>
                                     </el-radio-group>
                                     <br>
                                     <el-input-number v-model="form.qty" :min="1" :max="10"></el-input-number>
@@ -108,33 +108,32 @@
                 selectedCurrency: "USD",
                 centerDialogVisible: false,
                 totalPrice: 0,
-                modalItem: {
+                form: {
+                    id: '',
+                    qty: 1,
                     img: '',
                     prices: {
 
                     },
                     title: '',
                     description: '',
+                    type: 1,
                 },
                 currency: 'USD',
-                form: {
-                    id: '',
-                    qty: 1,
-                    type: 'middle'
-                },
                 items: []
             }
         },
         created () {
             this.init()
+            this.loadCart()
         },
         methods: {
             ...mapActions('cart', [
-                'addToCart'
+                'addToCart', 'loadCart'
             ]),
             handleSelect(item) {
-                this.modalItem = item
-                this.form.id = item.id
+                this.form = item
+                this.form.qty = 1
                 this.centerDialogVisible = true
             },
             getCurrentPrice(prices) {
@@ -164,11 +163,11 @@
             }
         },
         watch: {
-            modalItem(value) {
+            form(value) {
                 this.totalPrice =  this.getCurrentPrice(value.prices)
             },
             'form.selectedItem' (value) {
-                this.totalPrice = value * this.getCurrentPrice(this.modalItem.prices)
+                this.totalPrice = value * this.getCurrentPrice(this.form.prices)
             }
         }
     }

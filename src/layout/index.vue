@@ -1,10 +1,10 @@
 <template>
     <div>
         <el-header>
-            <div style="text-align: center; margin-top: 20px;"><a href="/"><img src="../assets/images/logo.png" width="260"/></a></div>
-            <template v-if="this.$route.name !== 'Cart'">
+            <div style="text-align: center; margin-top: 20px;"><a href="/"><img src="../assets/images/logo.png" width="280"/></a></div>
+            <div v-if="this.$route.name !== 'Cart'">
                 <menu-main/>
-            </template>
+            </div>
         </el-header>
         <app-main />
         <footer-main></footer-main>

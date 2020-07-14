@@ -52,6 +52,19 @@ export const constantRoutes = [
         meta: { title: 'Cart', icon: 'edit' }
       },
     ]
+  },
+  {
+    path: '/order',
+    component: Layout,
+    redirect: '/order',
+    children: [
+      {
+        path: '/',
+        component: () => import('@/views/order/index'),
+        name: 'Order',
+        meta: { title: 'Order', icon: 'edit' }
+      },
+    ]
   }
 ]
 

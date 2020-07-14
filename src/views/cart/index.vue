@@ -1,135 +1,221 @@
 <template>
-    <div style="min-height: 100vh;">
-        <div v-if="this.$route.name === 'Cart'" style="margin: 65px 0 25px 0;">
-            <p align="center">
-                <el-steps :active="1" style="width: 30%;">
-                    <el-step title="Step 1" icon="el-icon-shopping-cart-full" description="Cart"></el-step>
-                    <el-step title="Step 2" icon="el-icon-document-checked" description="Order"></el-step>
-                    <el-step title="Step 3" icon="el-icon-truck" description="Delivery"></el-step>
-                    <el-step title="Step 4" icon="el-icon-circle-check" description="Order is accepted"></el-step>
-                </el-steps>
-            </p>
-        </div>
-        <main class="cart-item">
-            <div class="top-cart"></div>
-            <section class="cart-section">
+    <div style="min-height: 80vh;">
+        <div v-if="(cartItemsLs && cartItemsLs.length) > 0">
+            <div v-if="this.$route.name === 'Cart'" style="margin: 65px 0 25px 0; text-align: center;">
                 <h1>Cart</h1>
-                <div style="margin: 50px 0 50px 0;">
-                    <el-row style="text-align: center;" v-for="(item, index) in items" :key="index">
-                        <hr>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="8" :xl="8">
-                            <div class="grid-content">
-                                <img
-                                        :src="item.img"
-                                        class="cart-image"
-                                        :alt="item.name"
-                                        :title="item.name"
-                                />
-                            </div>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
-                            <div class="grid-content">
-                                <h3> {{ item.name }}</h3>
-                                <p class="description"> {{ item.miniDescription }}</p>
-                            </div>
-                        </el-col>
-                        <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
-                            <div class="grid-content">
-                               <el-button type="danger" icon="el-icon-delete" circle></el-button>
-                            </div>
-                        </el-col>
-                    </el-row>
-                </div>
-            </section>
-            <div style="text-align: right; margin: 15px; font-size: medium;">
-                <span><b>Sub total:</b> 56 USD</span><br>
-                <span><b>Delivery Price:</b> 16 USD</span><br>
-                <h2><b>Total Cost:</b> 16 USD</h2><br><br>
+                <br>
+                <p align="center">
+                    <el-steps :active="activeStep" style="width: 40%;">
+                        <el-step title="Step 1" icon="el-icon-shopping-cart-full" description="Cart"></el-step>
+                        <el-step title="Step 2" icon="el-icon-document-checked" description="Order"></el-step>
+                        <el-step title="Step 3" icon="el-icon-truck" description="Delivery"></el-step>
+                        <el-step title="Step 4" icon="el-icon-circle-check" description="Order is accepted"></el-step>
+                    </el-steps>
+                </p>
             </div>
-            <div style="margin: 0 5% 0 5%;">
-                <el-row>
-                    <router-link to="/" class="left">
-                        <el-button type="primary" icon="el-icon-back"> Back</el-button>
-                    </router-link>
-                    &nbsp;&nbsp;
-                    <el-button style="float: right;" type="success" @click="centerDialogVisible = true"><i class="el-icon-shopping-cart-full"></i> To Order</el-button>
-                </el-row>
-            </div>
-        </main>
-        <el-dialog
-                title="Please, add your address"
-                :visible.sync="centerDialogVisible"
-                width="30%"
-                center>
+            <main class="cart-item">
+                <div class="top-cart"></div>
+                <section class="cart-section">
+                    <div style="margin: 50px 0 50px 0;">
+                        <el-row style="text-align: center;" v-for="(item, index) in cartItemsLs" :key="index">
 
-                <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
-                    <el-form-item label="Phone">
-                        <el-input v-model="formLabelAlign.region"></el-input>
+                            <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
+                                <div class="grid-content">
+                                    <img
+                                            :src="item.img"
+                                            class="cart-image"
+                                            :alt="item.name"
+                                            :title="item.name"
+                                    />
+                                </div>
+                            </el-col>
+                            <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
+                                <div class="grid-content">
+                                    <b> {{ item.name }}</b>
+                                    <p class="description"> {{ item.miniDescription }}</p>
+                                </div>
+                            </el-col>
+                            <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
+                                <el-input-number v-model="formOrder.items[formOrder.items.findIndex(x => x.item_id === item.id)].qty" style="width: 130px;" @change="handleChange(item.id)" :min="1" :max="15"></el-input-number>
+                            </el-col>
+                            <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
+                                <div class="grid-content">
+                                    {{ formOrder.items.find(x => x.item_id === item.id).qty * getCurrentPrice(item.prices) }} {{ formOrder.selectedCurrency }}
+                                </div>
+                            </el-col>
+                            <el-col :xs="24" :sm="24" :md="24" :lg="2" :xl="2">
+                                <div class="grid-content">
+                                    <el-button icon="el-icon-delete" circle></el-button>
+                                </div>
+                            </el-col>
+
+                        </el-row>
+                        <hr>
+                    </div>
+                </section>
+                <div style="text-align: right; margin: 15px; font-size: medium;">
+                    <span><b>Sub total:</b> {{ subTotalPrice }} {{ formOrder.selectedCurrency }}</span><br>
+                </div>
+                <br>
+                <el-form :label-position="labelPosition" label-width="100px" :model="formOrder.delivery">
+                    <el-form-item label="Your Name">
+                        <el-input v-model="formOrder.delivery.customer_name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Your customer_phone">
+                        <el-input v-model="formOrder.delivery.customer_phone">
+                            <template slot="prepend">+</template>
+                        </el-input>
                     </el-form-item>
                     <el-form-item label="Address">
-                        <el-input type="textarea" v-model="formLabelAlign.type"></el-input>
+                        <el-input type="textarea" v-model="formOrder.delivery.address"></el-input>
                     </el-form-item>
                 </el-form>
+                <br>
 
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="centerDialogVisible = false">Cancel</el-button>
-                    <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
-                </span>
-        </el-dialog>
+                <div style="text-align: right; margin: 15px; font-size: medium;">
+                    <span><b>Delivery Price:</b> {{ formOrder.delivery.delivery_cost }} {{ formOrder.selectedCurrency }}</span><br><br>
+                    <span><b>Payment Method:</b> Cash</span><br><br>
+                    <h2><b>Total Cost:</b> {{ totalCost }} {{ formOrder.selectedCurrency }}</h2><br><br>
+                </div>
+
+                <div style="margin: 0 5% 0 5%;">
+                    <el-row>
+                        <router-link to="/" class="left">
+                            <el-button type="primary" icon="el-icon-back"> Back</el-button>
+                        </router-link>
+                        &nbsp;&nbsp;
+                        <el-button style="float: right;" type="success" @click="checkoutOrder"><i class="el-icon-shopping-cart-full"></i> Checkout Order</el-button>
+                    </el-row>
+                </div>
+                <br>
+                <br>
+            </main>
+        </div>
+
+        <div v-if="(cartItemsLs && cartItemsLs.length) < 1">
+            <div style="text-align: center; margin-top: 20px;">
+                Cart is empty!
+                <br>
+                <br>
+                <img src="https://www.sportsdrive.in/images/empty-cart.png"/>
+
+                <br>
+                <br>
+                <router-link to="/">
+                    <el-button type="primary" icon="el-icon-arrow-left">Home</el-button>
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
+    import { mapGetters, mapActions } from 'vuex'
+    import { createOrder } from '../../api/order'
     export default {
         name: "Cart",
         data () {
             return {
+                order: {
+                    no: '',
+                    message: '',
+                },
+                activeStep: 1,
+                formOrder: {
+                    delivery: {
+                        delivery_cost: 15,
+                        customer_name: '',
+                        address: '',
+                        customer_phone: ''
+                    },
+                    paymentMethod: 'cash',
+                    selectedCurrency: 'USD',
+                    items: []
+                },
+                labelPosition: 'top',
                 centerDialogVisible: false,
                 form: {
+                    items: [],
                     selectedItem: 0
                 },
-                formLabelAlign: {
-                    name: '',
-                    region: '',
-                    type: ''
-                },
                 items: [
-                    {
-                        id: 1,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/5e347c8e1c8b4bc79cb16b683b113cc4_292x292.jpeg',
-                        name: 'Halved Pizza',
-                        price: '30',
-                        miniDescription: 'Collect your 35 cm pizza with two different flavors',
-                    },
-                    {
-                        id: 3,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/25cfbe54b782402f964a41be6417bea6_292x292.jpeg',
-                        name: 'Sprite',
-                        price: '55',
-                        miniDescription: '1 L',
-                    },
-                    {
-                        id: 4,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/be55eb49702e46289514998a88028c4f_292x292.jpeg',
-                        name: 'Coffee "Americano',
-                        price: '35',
-                        miniDescription: 'Espresso hot drink, 0.3 L',
-                    }
                 ]
+            }
+        },
+        computed: {
+            ...mapGetters([
+                'cartItemsLs'
+            ]),
+            subTotalPrice() {
+                let total = 0;
+                this.formOrder.items.forEach((item) => {
+                    total += this.getCurrentPrice(item.prices) * item.qty;
+                });
+                return total
+            },
+            totalCost() {
+                return this.formOrder.delivery.delivery_cost + this.subTotalPrice
+            }
+        },
+        created () {
+            this.loadCart()
+            this.fillOrderForm()
+        },
+        methods: {
+            ...mapActions('cart', [
+                'loadCart',
+                'clearCart'
+            ]),
+            fillOrderForm() {
+                this.cartItemsLs.forEach((item) => {
+                    if (item && item.qty) {
+                        this.formOrder.items.push({qty: item.qty, prices: item.prices, item_id: item.id, type: item.type })
+                    }
+                })
+            },
+            handleChange() {
+
+            },
+            getCurrentPrice(prices) {
+                return prices[this.formOrder.selectedCurrency] ? prices[this.formOrder.selectedCurrency] : 0
+            },
+            async checkoutOrder() {
+                const loading = this.$loading({
+                    lock: true,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                })
+                await createOrder(this.formOrder).then(response => {
+                    const { message, code, data } = response
+                    this.$notify({
+                        title: 'Order created',
+                        message,
+                        type: 'success'
+                    })
+                    if (code === 20000) {
+                        this.activeStep = 2
+                        this.clearCart()
+                    }
+                    this.$router.push({ path: '/order?no=' + data.no })
+                })
+                loading.close()
             }
         }
     }
 </script>
 
 <style scoped>
+    .grid-content {
+        padding: 20px;
+    }
     .cart-item {
-        width: 514px;
+        width: 614px;
         margin: 0px auto;
-        flex: 1 1 0%;
     }
     .cart-image {
-        width: 64px;
-        height: 64px;
+        width: 84px;
+        height: 84px;
         flex: 0 0 auto;
         margin: 0px 12px 0px 0px;
     }
