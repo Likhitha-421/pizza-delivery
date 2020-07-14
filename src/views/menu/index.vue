@@ -67,20 +67,20 @@
                                     <br>
                                     <div><strong>Price:</strong> {{ getCurrentPrice(modalItem.prices) }} {{ selectedCurrency }}</div>
                                     <br>
-                                    <el-radio-group class="size-select" v-model="form.labelSize" size="small">
+                                    <el-radio-group class="size-select" v-model="form.type" size="small">
                                         <el-radio-button label="small">Small</el-radio-button>
                                         <el-radio-button label="middle">Middle</el-radio-button>
                                         <el-radio-button label="big">Big</el-radio-button>
                                     </el-radio-group>
                                     <br>
-                                    <el-input-number v-model="form.selectedItem" :min="1" :max="10"></el-input-number>
+                                    <el-input-number v-model="form.qty" :min="1" :max="10"></el-input-number>
                                     <p><strong>Total price:</strong> {{ totalPrice }} &nbsp; {{ currency }}</p>
                                 </div>
                             </el-col>
                         </el-row>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="centerDialogVisible = false"><i class="el-icon-close" /> Cancel</el-button>
-                            <el-button type="primary" @click="centerDialogVisible = false"><i class="el-icon-plus" /> Add to Shopping Cart</el-button>
+                            <el-button type="primary" @click="confirmCart" :disabled="disableAddCart"><i class="el-icon-plus" /> Add to Shopping Cart</el-button>
                         </span>
                     </el-dialog>
                 </div>
@@ -104,6 +104,7 @@
         },
         data() {
             return {
+                disableAddCart: false,
                 selectedCurrency: "USD",
                 centerDialogVisible: false,
                 totalPrice: 0,
@@ -117,8 +118,9 @@
                 },
                 currency: 'USD',
                 form: {
-                    selectedItem: 1,
-                    labelSize: 'middle'
+                    id: '',
+                    qty: 1,
+                    type: 'middle'
                 },
                 items: []
             }
@@ -132,6 +134,7 @@
             ]),
             handleSelect(item) {
                 this.modalItem = item
+                this.form.id = item.id
                 this.centerDialogVisible = true
             },
             getCurrentPrice(prices) {
@@ -148,10 +151,20 @@
                     this.listLoading = false
                 }
             },
+            confirmCart() {
+                this.disableAddCart = true
+                this.addToCart(this.form)
+                this.$message({
+                    showClose: true,
+                    message: 'Congratulations! You have successfully added that item to your cart and ready to check out.',
+                    type: 'success'
+                });
+                setTimeout(() => this.centerDialogVisible = false, 2000);
+                setTimeout(() => this.disableAddCart = false, 2000);
+            }
         },
         watch: {
             modalItem(value) {
-                this.addToCart(value)
                 this.totalPrice =  this.getCurrentPrice(value.prices)
             },
             'form.selectedItem' (value) {
