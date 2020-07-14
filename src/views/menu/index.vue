@@ -1,6 +1,6 @@
 <template>
-    <div class="app-container">
-        <h2 style="text-align: left; margin-bottom: 20px; color: #ff6900;">Pizzas</h2>
+    <div v-if="parseInt(category.itemsCount)" class="app-container">
+        <h2 style="text-align: left; margin-bottom: 20px; color: #ff6900;">{{ category.name }}</h2>
         <el-row>
             <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" v-for="(item, index) in items" :key="index">
                 <div class="grid-content">
@@ -18,18 +18,18 @@
                             </figure>
                             <h2 class="product-title">{{ item.name }}</h2>
                             <span>
-                                {{ item.miniDescription }}
+                                {{ item.title }}
                             </span>
                         </main>
                         <footer class="pizza-footer" style="background-color: #ffffff;">
                             <div class="price-item">
                                 from <span class="money">
-                                <span class="value">{{ item.price }}</span>
-                                <span class="on-the-right"> USD</span>
+                                <span class="value">{{ getCurrentPrice(item.prices) }}</span>
+                                <span class="on-the-right"> {{ selectedCurrency }}</span>
                             </span>
                             </div>
                             <div class="pizza-select">
-                                <el-button type="success" @click="centerDialogVisible = true" round>Select</el-button>
+                                <el-button type="success" @click="handleSelect(item)" round>Select</el-button>
                             </div>
                         </footer>
                     </article>
@@ -49,7 +49,7 @@
                                 <div>
                                     <figure class="pizza-image">
                                         <img
-                                                src="https://cdn.dodostatic.net/static/Img/Products/5e347c8e1c8b4bc79cb16b683b113cc4_292x292.jpeg"
+                                                :src="modalItem.img"
                                                 height="292"
                                                 alt=""
                                                 type="1"
@@ -60,11 +60,12 @@
                             </el-col>
                             <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
                                 <div>
-                                    <h3>Pizza Pie</h3>
+                                    <h3>{{ modalItem.name }}</h3>
                                     <br>
-                                    <span>It should be noted that the content will not be aligned in center by default</span>
+                                    <span>{{ modalItem.title }}</span>
+                                    <p>{{ modalItem.description }}</p>
                                     <br>
-                                    <div><strong>Price:</strong> {{ 34 }} USD</div>
+                                    <div><strong>Price:</strong> {{ getCurrentPrice(modalItem.prices) }} {{ selectedCurrency }}</div>
                                     <br>
                                     <el-radio-group class="size-select" v-model="form.labelSize" size="small">
                                         <el-radio-button label="small">Small</el-radio-button>
@@ -72,7 +73,7 @@
                                         <el-radio-button label="big">Big</el-radio-button>
                                     </el-radio-group>
                                     <br>
-                                    <el-input-number v-model="form.selectedItem" @change="handleChange" :min="1" :max="10"></el-input-number>
+                                    <el-input-number v-model="form.selectedItem" :min="1" :max="10"></el-input-number>
                                     <p><strong>Total price:</strong> {{ totalPrice }} &nbsp; {{ currency }}</p>
                                 </div>
                             </el-col>
@@ -84,68 +85,77 @@
                     </el-dialog>
                 </div>
             </el-col>
-
         </el-row>
     </div>
 </template>
 
 <script>
+    import { fetchList } from '../../api/item'
+    import { mapActions } from 'vuex'
     export default {
         name: "MenuFoods",
+        props: {
+            category: {
+                type: Object,
+                default () {
+                    return {}
+                }
+            }
+        },
         data() {
             return {
+                selectedCurrency: "USD",
                 centerDialogVisible: false,
                 totalPrice: 0,
-                bufferCart: {},
+                modalItem: {
+                    img: '',
+                    prices: {
+
+                    },
+                    title: '',
+                    description: '',
+                },
                 currency: 'USD',
                 form: {
                     selectedItem: 1,
                     labelSize: 'middle'
                 },
-                items: [
-                    {
-                        id: 1,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/5e347c8e1c8b4bc79cb16b683b113cc4_292x292.jpeg',
-                        name: 'Halved Pizza',
-                        price: '30',
-                        miniDescription: 'Collect your 35 cm pizza with two different flavors',
-                    },
-                    {
-                        id: 2,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/2925a332340d4d85ba913d99b34d651a_292x292.jpeg',
-                        name: 'Vegetables and mushrooms',
-                        price: '45',
-                        miniDescription: 'Chicken, mozzarella, pineapple, tomato sauce',
-                    },
-                    {
-                        id: 3,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/Pizza/ru-RU/d5f51ef8-66d7-468d-83f2-d8cad5f4989e.jpg',
-                        name: 'Pizza Pie',
-                        price: '55',
-                        miniDescription: 'Oregano, pepperoni, mozzarella cheese, champignons, sliced olives, tomato sauce',
-                    },
-                    {
-                        id: 4,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/Pizza/ru-RU/5998fb51-0b03-4602-8395-fdb5a201cb3a.jpg',
-                        name: 'Hawaiian',
-                        price: '35',
-                        miniDescription: 'Pickles, tomatoes, red onions, mozzarella, minced beef, cheese sauce',
-                    },
-                    {
-                        id: 5,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/Pizza/ru-RU/421a622d-4ad3-47db-86a0-f85f19c4b63c.jpg',
-                        name: 'Pepperoni',
-                        price: '25',
-                        miniDescription: 'Tomato sauce, mozzarella, pepperoni',
-                    },
-                    {
-                        id: 6,
-                        img: 'https://cdn.dodostatic.net/static/Img/Products/Pizza/ru-RU/c9d27391-4f6b-42d0-a821-dc72f65e789e.jpg',
-                        name: 'Pizaa name',
-                        price: '25',
-                        miniDescription: 'Beef, olives, red onions, mozzarella, ham, pepperoni, bell peppers, champignons, tomato sauce Beef, olives, red onions, mozzarella, ham, pepperoni, bell peppers, champignons, tomato sauce',
-                    },
-                ]
+                items: []
+            }
+        },
+        created () {
+            this.init()
+        },
+        methods: {
+            ...mapActions('cart', [
+                'addToCart'
+            ]),
+            handleSelect(item) {
+                this.modalItem = item
+                this.centerDialogVisible = true
+            },
+            getCurrentPrice(prices) {
+                return prices[this.selectedCurrency] ? prices[this.selectedCurrency] : 0
+            },
+            init() {
+                this.getList()
+            },
+            async getList() {
+                if (parseInt(this.category.itemsCount)) {
+                    this.listLoading = true
+                    const { data } = await fetchList({ search: 'category_id:' + this.category.id })
+                    this.items = data
+                    this.listLoading = false
+                }
+            },
+        },
+        watch: {
+            modalItem(value) {
+                this.addToCart(value)
+                this.totalPrice =  this.getCurrentPrice(value.prices)
+            },
+            'form.selectedItem' (value) {
+                this.totalPrice = value * this.getCurrentPrice(this.modalItem.prices)
             }
         }
     }
@@ -153,7 +163,8 @@
 
 <style scoped>
     .app-container {
-        padding: 20px 10% 20px 10%;
+        padding: 10px 10% 10px 10%;
+        min-height: 100vh;
     }
     .item-article {
         display: flex;

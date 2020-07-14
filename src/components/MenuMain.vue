@@ -12,20 +12,38 @@
             <el-menu-item index="2-3" class="menu-items"><i class="el-icon-fork-spoon menu-items"></i> About our Restaurants</el-menu-item>
         </el-submenu>
         <div class="right-elements">
-            <button class="cart-button" @click="handleCart"><i class="el-icon-shopping-cart-2"></i> Cart</button>
+            <button class="cart-button" @click="handleCart"><i class="el-icon-shopping-cart-2"></i> Cart <b v-if="countItemsCart">| {{ countItemsCart }}</b></button>
             <button class="cart-button"><i class="el-icon-user"></i> Account</button>
         </div>
     </el-menu>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     export default {
         name: "MenuMain",
         methods: {
             handleCart() {
                 this.$router.push({ path: '/cart' })
+            },
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
             }
-        }
+        },
+        data () {
+            return {
+                activeIndex: "2"
+            }
+        },
+        computed: {
+            ...mapGetters([
+                'cartCount'
+            ]),
+            countItemsCart()
+            {
+                return this.cartCount
+            }
+        },
     }
 </script>
 

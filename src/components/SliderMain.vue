@@ -1,6 +1,6 @@
 <template>
     <el-carousel :interval="4000" type="card" height="375px">
-        <el-carousel-item v-for="item in slides" :key="item" class="slider" style="transform: translate3d(-2608px, 0px, 0px); transition-duration: 0ms;">
+        <el-carousel-item v-for="(item, index) in slides" :key="index" class="slider" style="transform: translate3d(-2608px, 0px, 0px); transition-duration: 0ms;">
             <img class="slide-image" :data-src="item.img" :src="item.img"/>
         </el-carousel-item>
     </el-carousel>

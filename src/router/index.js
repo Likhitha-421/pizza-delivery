@@ -31,11 +31,6 @@ export const constantRoutes = [
     path: '/menu',
     component: Layout,
     redirect: '/menu',
-    name: 'Menu',
-    meta: {
-      title: 'Menu',
-      icon: 'example'
-    },
     children: [
       {
         path: '/',
@@ -49,11 +44,6 @@ export const constantRoutes = [
     path: '/cart',
     component: Layout,
     redirect: '/cart',
-    name: 'Cart',
-    meta: {
-      title: 'Cart',
-      icon: 'example'
-    },
     children: [
       {
         path: '/',
