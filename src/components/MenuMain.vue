@@ -9,7 +9,7 @@
             <router-link to="/"><i class="el-icon-s-home"></i> Home</router-link>
         </el-menu-item>
         <template>
-            <template>
+            <template v-if="isHome">
                 <el-menu-item v-for="(menu, index) in menuList" :index="index.toString()" :key="index" class="menu-items" v-scroll-to="'#menu-' + menu.id">
                     <i :class="menu.icon"></i> {{ menu.name }}
                 </el-menu-item>
@@ -20,16 +20,16 @@
             <el-submenu index="5" class="menu-items">
                 <template slot="title">
                     <i class="el-icon-info"></i>
-                    <span class="menu-items">About Service</span>
+                    <router-link to="/about">About Service</router-link>
                 </template>
                 <el-menu-item index="5-1" class="menu-items">
-                    <i class="el-icon-truck"></i> About Delivery
+                    <router-link to="/about"><i class="el-icon-info"></i> About Us</router-link>
                 </el-menu-item>
                 <el-menu-item index="5-2" class="menu-items">
-                    <i class="el-icon-truck"></i> Payment
+                    <router-link to="/delivery"><i class="el-icon-truck"></i> Delivery</router-link>
                 </el-menu-item>
                 <el-menu-item index="5-3" class="menu-items">
-                    <i class="el-icon-fork-spoon"></i> About our Restaurants
+                    <router-link to="/payment"><i class="el-icon-coin"></i> Payment</router-link>
                 </el-menu-item>
             </el-submenu>
         </template>
@@ -102,6 +102,9 @@
             },
             isCartPage() {
                 return this.$route.name === 'Cart'
+            },
+            isHome() {
+                return this.$route.name === 'Home'
             }
         },
     }
@@ -111,8 +114,16 @@
         .app-container {
             padding: 0 10% 0 10%;
         }
+        .menu-items i {
+            color: #ff6900 !important;
+        }
         .menu-items {
-            /*color: #ff6900 !important;*/
+            font-weight: 500;
+            color: #ff6900 !important;
+        }
+        .menu-items a {
+            font-weight: 500;
+            color: #ff6900 !important;
         }
         .right-elements {
             float: right;

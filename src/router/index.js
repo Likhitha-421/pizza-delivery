@@ -22,8 +22,7 @@ export const constantRoutes = [
       {
         path: 'home',
         component: () => import('@/views/home'),
-        name: 'Home',
-        meta: { title: 'Home', icon: 'dashboard', affix: true }
+        name: 'Home'
       }
     ]
   },
@@ -35,8 +34,7 @@ export const constantRoutes = [
       {
         path: '/',
         component: () => import('@/views/menu/index'),
-        name: 'MenuFoods',
-        meta: { title: 'Menu', icon: 'edit' }
+        name: 'MenuFoods'
       },
     ]
   },
@@ -48,8 +46,7 @@ export const constantRoutes = [
       {
         path: '/',
         component: () => import('@/views/cart/index'),
-        name: 'Cart',
-        meta: { title: 'Cart', icon: 'edit' }
+        name: 'Cart'
       },
     ]
   },
@@ -61,8 +58,43 @@ export const constantRoutes = [
       {
         path: '/',
         component: () => import('@/views/order/index'),
-        name: 'Order',
-        meta: { title: 'Order', icon: 'edit' }
+        name: 'Order'
+      },
+    ]
+  },
+  {
+    path: '/payment',
+    component: Layout,
+    redirect: '/payment',
+    children: [
+      {
+        path: '/',
+        component: () => import('@/views/about/payment'),
+        name: 'Payment'
+      },
+    ]
+  },
+  {
+    path: '/about',
+    component: Layout,
+    redirect: '/about',
+    children: [
+      {
+        path: '/',
+        component: () => import('@/views/about/about'),
+        name: 'About'
+      },
+    ]
+  },
+  {
+    path: '/delivery',
+    component: Layout,
+    redirect: '/delivery',
+    children: [
+      {
+        path: '/',
+        component: () => import('@/views/about/delivery'),
+        name: 'Delivery'
       },
     ]
   }
