@@ -26,6 +26,17 @@
                 </span>
             </div>
         </div>
+        <div else>
+            <div style="min-height: 80vh;">
+                <div>
+                    <br>
+                    <br>
+                    <div style="margin: 65px 0 25px 0; text-align: center;">
+                        <h1>Your Orders</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

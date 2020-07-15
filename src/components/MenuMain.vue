@@ -5,31 +5,31 @@
              mode="horizontal"
              @select="handleSelect"
     >
-        <el-menu-item index="1" class="menu-items">
-            <i class="el-icon-orange menu-items"></i> Home
+        <el-menu-item index="-1" class="menu-items">
+            <router-link to="/"><i class="el-icon-s-home"></i> Home</router-link>
         </el-menu-item>
         <template>
-            <el-menu-item index="2" class="menu-items">
-                <i class="el-icon-orange menu-items"></i> Menu pizzas
-            </el-menu-item>
-            <el-menu-item index="3" class="menu-items">
-                <i class="el-icon-coffee menu-items"></i> Other Items
-            </el-menu-item>
+            <template>
+                <el-menu-item v-for="(menu, index) in menuList" :index="index.toString()" :key="index" class="menu-items">
+                    <i :class="menu.icon"></i> {{ menu.name }}
+                </el-menu-item>
+            </template>
             <el-menu-item index="4" class="menu-items">
-                <a href="#"><i class="el-icon-sold-out menu-items"></i>My Orders</a>
+                <router-link to="/order"><i class="el-icon-sold-out"></i>My Orders</router-link>
             </el-menu-item>
             <el-submenu index="5" class="menu-items">
-                <template slot="title"><i class="el-icon-info menu-items"></i>
+                <template slot="title">
+                    <i class="el-icon-info"></i>
                     <span class="menu-items">About Service</span>
                 </template>
                 <el-menu-item index="5-1" class="menu-items">
-                    <i class="el-icon-truck menu-items"></i> About Delivery
+                    <i class="el-icon-truck"></i> About Delivery
                 </el-menu-item>
                 <el-menu-item index="5-2" class="menu-items">
-                    <i class="el-icon-truck menu-items"></i> Payment
+                    <i class="el-icon-truck"></i> Payment
                 </el-menu-item>
                 <el-menu-item index="5-3" class="menu-items">
-                    <i class="el-icon-fork-spoon menu-items"></i> About our Restaurants
+                    <i class="el-icon-fork-spoon"></i> About our Restaurants
                 </el-menu-item>
             </el-submenu>
         </template>
@@ -68,6 +68,9 @@
             ...mapActions('currency', [
                'selectCurrency'
             ]),
+            ...mapActions('menu', [
+               'loadMenu'
+            ]),
             handleCart() {
                 this.$router.push({ path: '/cart' })
             },
@@ -78,6 +81,9 @@
                 this.selectCurrency(currency)
             }
         },
+        created() {
+          this.loadMenu()
+        },
         data () {
             return {
                 activeIndex: "2",
@@ -87,7 +93,8 @@
         computed: {
             ...mapGetters([
                 'cartCount',
-                'selectedCurrency'
+                'selectedCurrency',
+                'menuList'
             ]),
             countItemsCart()
             {

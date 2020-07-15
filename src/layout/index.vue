@@ -1,11 +1,15 @@
 <template>
     <div>
         <el-header>
-            <div style="text-align: center; margin-top: 20px;"><a href="/"><img src="../assets/images/logo.png" width="280"/></a></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <router-link to="/">
+                    <img src="../assets/images/logo.png" width="280"/>
+                </router-link>
+            </div>
             <menu-main/>
         </el-header>
         <app-main />
-        <footer-main></footer-main>
+        <footer-main/>
     </div>
 </template>
 
@@ -20,12 +24,16 @@
             AppMain, FooterMain, MenuMain
         },
         created () {
-          this.loadCurrency()
+            this.loadCurrency()
+            this.loadCart()
         },
         methods: {
             ...mapActions('currency', [
                 'loadCurrency'
-            ])
+            ]),
+            ...mapActions('cart', [
+                'loadCart'
+            ]),
         }
     }
 </script>

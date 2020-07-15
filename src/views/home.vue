@@ -3,15 +3,16 @@
         <div style="margin-top: 60px">
             <slider-main/>
         </div>
-        <menu-foods :category="category" v-for="(category, index) in categories" :key="index"/>
+        <div v-for="(category, index) in menuList" :key="index">
+            <menu-foods :category="category" />
+        </div>
     </div>
 </template>
 
 <script>
     import MenuFoods from './menu'
     import SliderMain from '../components/SliderMain'
-    import { fetchCategoryList } from '../api/category'
-    import { mapActions } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
     export default {
         name: "Home",
         components: {
@@ -25,20 +26,17 @@
         created() {
             this.init();
         },
-
+        computed: {
+            ...mapGetters([
+                'menuList'
+            ]),
+        },
         methods: {
-            ...mapActions('cart', [
-                'loadCart'
+            ...mapActions('menu', [
+                'loadMenu'
             ]),
             init() {
-                this.getList()
-                this.loadCart()
-            },
-            async getList() {
-                this.listLoading = true
-                const { data } = await fetchCategoryList()
-                this.categories = data
-                this.listLoading = false
+                this.loadMenu()
             },
         }
     }

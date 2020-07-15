@@ -1,9 +1,9 @@
 <template>
     <div style="min-height: 80vh;">
-        <div v-if="(cartItemsLs && cartItemsLs.length) > 0">
+        <div v-if="hasItems">
             <br>
             <br>
-            <div v-if="this.$route.name === 'Cart'" style="margin: 65px 0 25px 0; text-align: center;">
+            <div style="margin: 65px 0 25px 0; text-align: center;">
                 <h1>Your Cart</h1>
                 <br>
                 <p align="center">
@@ -19,7 +19,7 @@
                 <div class="top-cart"></div>
                 <section class="cart-section">
                     <div style="margin: 50px 0 50px 0;">
-                        <el-row style="text-align: center;" v-for="(item, index) in cartItemsLs" :key="index">
+                        <el-row style="text-align: center;" v-for="(item, index) in cartItems" :key="index">
 
                             <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
                                 <div class="grid-content">
@@ -34,19 +34,19 @@
                             <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
                                 <div class="grid-content">
                                     <b> {{ item.name }}</b>
-                                    <p class="description"> {{ item.miniDescription }}</p>
+                                    <p class="description"> {{ item.title }}</p>
                                 </div>
                             </el-col>
                             <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
-                                <el-input-number v-model="formOrder.items[formOrder.items.findIndex(x => x.item_id === item.id)].qty"
+                                <el-input-number v-model="cartItems[cartItems.findIndex(x => x.id === item.id)].qty"
                                                  style="width: 130px;"
-                                                 @change="handleChange({ id: item.id, qty: formOrder.items[formOrder.items.findIndex(x => x.item_id === item.id)].qty })" :min="1" :max="15"
+                                                 @change="handleQty({ id: item.id, qty: cartItems[cartItems.findIndex(x => x.id === item.id)].qty })" :min="1" :max="15"
                                 >
                                 </el-input-number>
                             </el-col>
                             <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
                                 <div class="grid-content">
-                                    {{ formOrder.items.find(x => x.item_id === item.id).qty * getCurrentPrice(item.prices) }} {{ selectedCurrency }}
+                                    {{ cartItems[cartItems.findIndex(x => x.id === item.id)].qty * getCurrentPrice(item.prices) }} {{ selectedCurrency }}
                                 </div>
                             </el-col>
                             <el-col :xs="24" :sm="24" :md="24" :lg="2" :xl="2">
@@ -106,7 +106,13 @@
             </main>
         </div>
 
-        <div v-if="(cartItemsLs && cartItemsLs.length) < 1">
+        <div else>
+            <br>
+            <br>
+            <div style="margin: 65px 0 25px 0; text-align: center;">
+                <h1>Your Cart</h1>
+                <br>
+            </div>
             <div style="text-align: center; margin-top: 20px;">
                 Cart is empty!
                 <br>
@@ -150,21 +156,17 @@
                     selectedCurrency: 'USD',
                     items: []
                 },
-                labelPosition: 'top',
-                centerDialogVisible: false,
-                form: {
-                    items: [],
-                    selectedItem: 0
-                },
-                items: [
-                ]
+                labelPosition: 'top'
             }
         },
         computed: {
             ...mapGetters([
-                'cartItemsLs',
+                'cartItems',
                 'selectedCurrency'
             ]),
+            hasItems() {
+              return this.cartItems && Object.assign(this.cartItems, {}).length > 0;
+            },
             subTotalPrice() {
                 let total = 0;
                 this.formOrder.items.forEach((item) => {
@@ -176,34 +178,38 @@
                 return this.formOrder.delivery.delivery_cost + this.subTotalPrice
             }
         },
-        created () {
-            this.loadCart()
-            this.fillOrderForm()
+        mounted () {
+            this.updateOrderForm()
         },
         methods: {
             ...mapActions('cart', [
-                'loadCart',
                 'clearCart',
                 'removeItem',
                 'changeQty'
             ]),
-            fillOrderForm() {
-                this.cartItemsLs.forEach((item) => {
-                    if (item && item.qty) {
-                        this.formOrder.items.push({qty: item.qty, prices: item.prices, item_id: item.id, type: item.type })
-                    }
-                })
+            async updateOrderForm() {
+                if (this.hasItems) {
+                    this.formOrder.items = []
+                    await this.cartItems.forEach((item) => {
+                        if (item && item.qty) {
+                            this.formOrder.items.push({qty: item.qty, prices: item.prices, item_id: item.id, type: item.type })
+                        }
+                    })
+                }
             },
-            handleChange(item) {
+            handleQty(item) {
                 this.changeQty(item)
+                this.updateOrderForm()
             },
             deleteItem(value) {
                 this.removeItem(value)
+                this.updateOrderForm()
             },
             getCurrentPrice(prices) {
                 return prices[this.selectedCurrency] ? prices[this.selectedCurrency] : 0
             },
             async checkoutOrder() {
+                this.updateOrderForm()
                 const loading = this.$loading({
                     lock: true,
                     text: 'Loading',

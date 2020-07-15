@@ -1,6 +1,8 @@
 <template>
-    <div v-if="parseInt(category.itemsCount)" class="app-container">
-        <h2 style="text-align: left; margin-bottom: 20px; color: #ff6900;">{{ category.name }}</h2>
+    <div v-if="category" class="app-container">
+        <h2 style="text-align: left; margin-bottom: 20px; color: #ff6900;">
+            {{ category.name }}
+        </h2>
         <el-row>
             <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6" v-for="(item, index) in items" :key="index">
                 <div class="grid-content">
@@ -13,8 +15,7 @@
                                         :alt="item.name"
                                         :title="item.name"
                                         type="1"
-                                        data-ll-status="loaded"
-                                />
+                                        data-ll-status="loaded"/>
                             </figure>
                             <h2 class="product-title">{{ item.name }}</h2>
                             <span>
@@ -24,12 +25,20 @@
                         <footer class="pizza-footer" style="background-color: #ffffff;">
                             <div class="price-item">
                                 from <span class="money">
-                                <span class="value">{{ getCurrentPrice(item.prices) }}</span>
-                                <span class="on-the-right"> {{ selectedCurrency }}</span>
+                                <span class="value">
+                                    {{ getCurrentPrice(item.prices) }}
+                                </span>
+                                <span class="on-the-right">
+                                    &nbsp;{{ selectedCurrency }}
+                                </span>
                             </span>
                             </div>
                             <div class="pizza-select">
-                                <el-button type="success" @click="handleSelect(item)" round>Select</el-button>
+                                <el-button
+                                        type="success"
+                                        @click="handleSelect(item)"
+                                        round>Select
+                                </el-button>
                             </div>
                         </footer>
                     </article>
@@ -40,7 +49,7 @@
             <el-col :xs="24" :sm="12" :md="12" :lg="8" :xl="6">
                 <div class="grid-content bg-purple-dark">
                     <el-dialog
-                            title="Pizza Pie"
+                            :title="form.name"
                             :visible.sync="centerDialogVisible"
                             width="60%"
                             center>
@@ -53,8 +62,7 @@
                                                 height="292"
                                                 alt=""
                                                 type="1"
-                                                data-ll-status="loaded"
-                                        />
+                                                data-ll-status="loaded"/>
                                     </figure>
                                 </div>
                             </el-col>
@@ -65,7 +73,9 @@
                                     <span>{{ form.title }}</span>
                                     <p>{{ form.description }}</p>
                                     <br>
-                                    <div><strong>Price:</strong> {{ getCurrentPrice(form.prices) }} {{ selectedCurrency }}</div>
+                                    <div>
+                                        <strong>Price:</strong> {{ getCurrentPrice(form.prices) }} {{ selectedCurrency }}
+                                    </div>
                                     <br>
                                     <el-radio-group class="size-select" v-model="form.type" size="small">
                                         <el-radio-button label="1">Small</el-radio-button>
@@ -73,14 +83,21 @@
                                         <el-radio-button label="3">Big</el-radio-button>
                                     </el-radio-group>
                                     <br>
-                                    <el-input-number v-model="form.qty" :min="1" :max="10"></el-input-number>
-                                    <p><strong>Total price:</strong> {{ totalPrice }} &nbsp; {{ currency }}</p>
+                                    <el-input-number v-model="num" :step="2"></el-input-number>
+                                    <p><strong>Total price:</strong> {{ totalPrice }} &nbsp; {{ selectedCurrency }}</p>
                                 </div>
                             </el-col>
                         </el-row>
                         <span slot="footer" class="dialog-footer">
-                            <el-button @click="centerDialogVisible = false"><i class="el-icon-close" /> Cancel</el-button>
-                            <el-button type="primary" @click="confirmCart" :disabled="disableAddCart"><i class="el-icon-plus" /> Add to Shopping Cart</el-button>
+                            <el-button @click="centerDialogVisible = false">
+                                <i class="el-icon-close" /> Cancel
+                            </el-button>
+                            <el-button
+                                    type="primary"
+                                    @click="confirmCart"
+                                    :disabled="disableAddCart">
+                                <i class="el-icon-plus" /> Add to Shopping Cart
+                            </el-button>
                         </span>
                     </el-dialog>
                 </div>
@@ -104,6 +121,7 @@
         },
         data() {
             return {
+                num: 1,
                 disableAddCart: false,
                 centerDialogVisible: false,
                 totalPrice: 0,
@@ -112,13 +130,11 @@
                     qty: 1,
                     img: '',
                     prices: {
-
                     },
                     title: '',
                     description: '',
                     type: 1,
                 },
-                currency: 'USD',
                 items: []
             }
         },
@@ -129,11 +145,10 @@
         },
         created () {
             this.init()
-            this.loadCart()
         },
         methods: {
             ...mapActions('cart', [
-                'addToCart', 'loadCart'
+                'addToCart'
             ]),
             handleSelect(item) {
                 this.form = item
@@ -147,11 +162,9 @@
                 this.getList()
             },
             async getList() {
-                if (parseInt(this.category.itemsCount)) {
-                    this.listLoading = true
+                if (this.category) {
                     const { data } = await fetchList({ search: 'category_id:' + this.category.id })
                     this.items = data
-                    this.listLoading = false
                 }
             },
             confirmCart() {
@@ -172,6 +185,9 @@
             },
             'form.selectedItem' (value) {
                 this.totalPrice = value * this.getCurrentPrice(this.form.prices)
+            },
+            num() {
+                this.form.qty = this.num
             }
         }
     }
