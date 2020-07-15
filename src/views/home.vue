@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div style="margin-top: 60px">
+        <div style="margin-top: 80px">
             <slider-main/>
         </div>
         <div v-for="(category, index) in menuList" :key="index">

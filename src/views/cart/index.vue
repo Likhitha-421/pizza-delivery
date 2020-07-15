@@ -63,7 +63,10 @@
                     <span><b>Sub total:</b> {{ subTotalPrice }} {{ selectedCurrency }}</span><br>
                 </div>
                 <br>
-                <el-form :label-position="labelPosition" label-width="100px" :model="formOrder.delivery">
+                <el-form
+                        :label-position="labelPosition"
+                         label-width="100px"
+                         :model="formOrder.delivery">
                     <el-form-item label="Your Name">
                         <el-input v-model="formOrder.delivery.customer_name"></el-input>
                     </el-form-item>
