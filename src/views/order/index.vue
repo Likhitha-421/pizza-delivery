@@ -26,7 +26,7 @@
                 </span>
             </div>
         </div>
-        <div else>
+        <div v-else>
             <div style="min-height: 80vh;">
                 <div>
                     <br>
