@@ -109,7 +109,7 @@
             </main>
         </div>
 
-        <div else>
+        <div v-else>
             <br>
             <br>
             <div style="margin: 65px 0 25px 0; text-align: center;">
