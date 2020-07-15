@@ -5,12 +5,12 @@
              mode="horizontal"
              @select="handleSelect"
     >
-        <el-menu-item index="-1" class="menu-items">
+        <el-menu-item index="-1" class="menu-items" v-scroll-to="'#menu-home'">
             <router-link to="/"><i class="el-icon-s-home"></i> Home</router-link>
         </el-menu-item>
         <template>
             <template>
-                <el-menu-item v-for="(menu, index) in menuList" :index="index.toString()" :key="index" class="menu-items">
+                <el-menu-item v-for="(menu, index) in menuList" :index="index.toString()" :key="index" class="menu-items" v-scroll-to="'#menu-' + menu.id">
                     <i :class="menu.icon"></i> {{ menu.name }}
                 </el-menu-item>
             </template>

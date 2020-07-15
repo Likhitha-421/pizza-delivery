@@ -1,5 +1,5 @@
 <template>
-    <div v-if="category" class="app-container">
+    <div v-if="category" :id="'menu-' + category.id" class="app-container">
         <h2 style="text-align: left; margin-bottom: 20px; color: #ff6900;">
             {{ category.name }}
         </h2>

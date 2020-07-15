@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="menu-home">
         <el-header style="height: auto !important;">
             <div style="text-align: center; padding-top: 10px;">
                 <router-link to="/">
