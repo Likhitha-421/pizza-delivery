@@ -14,6 +14,7 @@
     "vue": "^2.6.11",
     "vue-fixed-header": "^3.2.14",
     "vue-router": "^3.3.4",
+    "vuejs-scroll-fixed-header": "^1.0.2",
     "vuex": "^3.5.1"
   },
   "devDependencies": {

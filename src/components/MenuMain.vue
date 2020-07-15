@@ -116,7 +116,7 @@
         }
         .right-elements {
             float: right;
-            height: 60px;
+            /*height: 60px;*/
             line-height: 60px;
             margin: 0;
             border-bottom: 2px solid transparent;
@@ -125,7 +125,7 @@
         .cart-button {
             font-weight: 500;
             font-size: 14px;
-            height: 60px;
+            /*height: 60px;*/
             line-height: 40px;
             position: relative;
             cursor: pointer;

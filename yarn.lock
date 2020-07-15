@@ -7980,6 +7980,11 @@ vue@^2.5.17, vue@^2.6.11:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
 
+vuejs-scroll-fixed-header@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/vuejs-scroll-fixed-header/-/vuejs-scroll-fixed-header-1.0.2.tgz#40268289f5449950207faa589ef74075c55fa398"
+  integrity sha512-Lsm0CZbwCp5G45E8o2+6QpZjG7LtaI0amxxORSDUovaI7agxsc5xIi8RX516FkoGLpovQZ1q5DDhYlqkOpqMXg==
+
 vuex@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.5.1.tgz#f1b8dcea649bc25254cf4f4358081dbf5da18b3d"

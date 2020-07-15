@@ -1,12 +1,14 @@
 <template>
     <div>
-        <el-header>
-            <div style="text-align: center; margin-top: 20px;">
+        <el-header style="height: auto !important;">
+            <div style="text-align: center; padding-top: 10px;">
                 <router-link to="/">
                     <img src="../assets/images/logo.png" width="280"/>
                 </router-link>
             </div>
-            <menu-main/>
+            <scroll-fixed-header :fixed.sync="fixed" :threshold="56">
+                <menu-main/>
+            </scroll-fixed-header>
         </el-header>
         <app-main />
         <footer-main/>
@@ -22,6 +24,11 @@
         name: "index",
         components: {
             AppMain, FooterMain, MenuMain
+        },
+        data () {
+          return {
+              fixed: false
+          }
         },
         created () {
             this.loadCurrency()
