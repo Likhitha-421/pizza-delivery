@@ -91,7 +91,7 @@
 
 <script>
     import { fetchList } from '../../api/item'
-    import { mapActions } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
     export default {
         name: "MenuFoods",
         props: {
@@ -105,7 +105,6 @@
         data() {
             return {
                 disableAddCart: false,
-                selectedCurrency: "USD",
                 centerDialogVisible: false,
                 totalPrice: 0,
                 form: {
@@ -122,6 +121,11 @@
                 currency: 'USD',
                 items: []
             }
+        },
+        computed: {
+            ...mapGetters([
+                'selectedCurrency'
+            ]),
         },
         created () {
             this.init()

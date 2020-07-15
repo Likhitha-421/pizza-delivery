@@ -1,8 +1,10 @@
 <template>
     <div style="min-height: 80vh;">
         <div v-if="(cartItemsLs && cartItemsLs.length) > 0">
+            <br>
+            <br>
             <div v-if="this.$route.name === 'Cart'" style="margin: 65px 0 25px 0; text-align: center;">
-                <h1>Cart</h1>
+                <h1>Your Cart</h1>
                 <br>
                 <p align="center">
                     <el-steps :active="activeStep" style="width: 40%;">
@@ -36,16 +38,20 @@
                                 </div>
                             </el-col>
                             <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
-                                <el-input-number v-model="formOrder.items[formOrder.items.findIndex(x => x.item_id === item.id)].qty" style="width: 130px;" @change="handleChange(item.id)" :min="1" :max="15"></el-input-number>
+                                <el-input-number v-model="formOrder.items[formOrder.items.findIndex(x => x.item_id === item.id)].qty"
+                                                 style="width: 130px;"
+                                                 @change="handleChange({ id: item.id, qty: formOrder.items[formOrder.items.findIndex(x => x.item_id === item.id)].qty })" :min="1" :max="15"
+                                >
+                                </el-input-number>
                             </el-col>
                             <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
                                 <div class="grid-content">
-                                    {{ formOrder.items.find(x => x.item_id === item.id).qty * getCurrentPrice(item.prices) }} {{ formOrder.selectedCurrency }}
+                                    {{ formOrder.items.find(x => x.item_id === item.id).qty * getCurrentPrice(item.prices) }} {{ selectedCurrency }}
                                 </div>
                             </el-col>
                             <el-col :xs="24" :sm="24" :md="24" :lg="2" :xl="2">
                                 <div class="grid-content">
-                                    <el-button icon="el-icon-delete" circle></el-button>
+                                    <el-button icon="el-icon-delete" @click="deleteItem(item.id)" circle></el-button>
                                 </div>
                             </el-col>
 
@@ -54,7 +60,7 @@
                     </div>
                 </section>
                 <div style="text-align: right; margin: 15px; font-size: medium;">
-                    <span><b>Sub total:</b> {{ subTotalPrice }} {{ formOrder.selectedCurrency }}</span><br>
+                    <span><b>Sub total:</b> {{ subTotalPrice }} {{ selectedCurrency }}</span><br>
                 </div>
                 <br>
                 <el-form :label-position="labelPosition" label-width="100px" :model="formOrder.delivery">
@@ -67,15 +73,17 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="Address">
-                        <el-input type="textarea" v-model="formOrder.delivery.address"></el-input>
+                        <el-input type="textarea"
+                                  v-model="formOrder.delivery.address"
+                        ></el-input>
                     </el-form-item>
                 </el-form>
                 <br>
 
                 <div style="text-align: right; margin: 15px; font-size: medium;">
-                    <span><b>Delivery Price:</b> {{ formOrder.delivery.delivery_cost }} {{ formOrder.selectedCurrency }}</span><br><br>
+                    <span><b>Delivery Price:</b> {{ formOrder.delivery.delivery_cost }} {{ selectedCurrency }}</span><br><br>
                     <span><b>Payment Method:</b> Cash</span><br><br>
-                    <h2><b>Total Cost:</b> {{ totalCost }} {{ formOrder.selectedCurrency }}</h2><br><br>
+                    <h2><b>Total Cost:</b> {{ totalCost }} {{ selectedCurrency }}</h2><br><br>
                 </div>
 
                 <div style="margin: 0 5% 0 5%;">
@@ -84,7 +92,13 @@
                             <el-button type="primary" icon="el-icon-back"> Back</el-button>
                         </router-link>
                         &nbsp;&nbsp;
-                        <el-button style="float: right;" type="success" @click="checkoutOrder"><i class="el-icon-shopping-cart-full"></i> Checkout Order</el-button>
+                        <el-button
+                                style="float: right;"
+                                type="success"
+                                @click="checkoutOrder"
+                        >
+                            <i class="el-icon-shopping-cart-full"></i> Checkout Order
+                        </el-button>
                     </el-row>
                 </div>
                 <br>
@@ -102,7 +116,11 @@
                 <br>
                 <br>
                 <router-link to="/">
-                    <el-button type="primary" icon="el-icon-arrow-left">Home</el-button>
+                    <el-button
+                            type="primary"
+                            icon="el-icon-arrow-left"
+                    >Home
+                    </el-button>
                 </router-link>
             </div>
         </div>
@@ -144,7 +162,8 @@
         },
         computed: {
             ...mapGetters([
-                'cartItemsLs'
+                'cartItemsLs',
+                'selectedCurrency'
             ]),
             subTotalPrice() {
                 let total = 0;
@@ -164,7 +183,9 @@
         methods: {
             ...mapActions('cart', [
                 'loadCart',
-                'clearCart'
+                'clearCart',
+                'removeItem',
+                'changeQty'
             ]),
             fillOrderForm() {
                 this.cartItemsLs.forEach((item) => {
@@ -173,11 +194,14 @@
                     }
                 })
             },
-            handleChange() {
-
+            handleChange(item) {
+                this.changeQty(item)
+            },
+            deleteItem(value) {
+                this.removeItem(value)
             },
             getCurrentPrice(prices) {
-                return prices[this.formOrder.selectedCurrency] ? prices[this.formOrder.selectedCurrency] : 0
+                return prices[this.selectedCurrency] ? prices[this.selectedCurrency] : 0
             },
             async checkoutOrder() {
                 const loading = this.$loading({
@@ -200,6 +224,11 @@
                     this.$router.push({ path: '/order?no=' + data.no })
                 })
                 loading.close()
+            }
+        },
+        watch: {
+            selectedCurrency() {
+                this.formOrder.selectedCurrency = this.selectedCurrency
             }
         }
     }
