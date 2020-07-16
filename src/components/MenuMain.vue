@@ -7,30 +7,30 @@
                      :mode="isActive ? 'vertical' : 'horizontal'"
                      @select="handleSelect"
             >
-                <el-menu-item index="-1" class="menu-items" v-scroll-to="'#menu-home'">
+                <el-menu-item index="-1" class="menu-items" :style="isActive ? 'display:block;' : ''" v-scroll-to="'#menu-home'">
                     <router-link to="/"><i class="el-icon-s-home"></i> Home</router-link>
                 </el-menu-item>
                 <template>
                     <template v-if="isHome">
-                        <el-menu-item v-for="(menu, index) in menuList" :index="index.toString()" :key="index" class="menu-items" v-scroll-to="'#menu-' + menu.id">
+                        <el-menu-item v-for="(menu, index) in menuList" :index="index.toString()" :key="index" :style="isActive ? 'display:block;' : ''" class="menu-items" v-scroll-to="'#menu-' + menu.id">
                             <i :class="menu.icon"></i> {{ menu.name }}
                         </el-menu-item>
                     </template>
-                    <el-menu-item index="4" class="menu-items">
+                    <el-menu-item index="4" class="menu-items" :style="isActive ? 'display:block;' : ''">
                         <router-link to="/order"><i class="el-icon-sold-out"></i>My Orders</router-link>
                     </el-menu-item>
-                    <el-submenu index="5" class="menu-items">
+                    <el-submenu index="5" class="menu-items" :style="isActive ? 'display:block;' : ''">
                         <template slot="title">
                             <i class="el-icon-info"></i>
                             <router-link to="/about">About Service</router-link>
                         </template>
-                        <el-menu-item index="5-1" class="menu-items">
+                        <el-menu-item index="5-1" class="menu-items" :style="isActive ? 'display:block;' : ''">
                             <router-link to="/about"><i class="el-icon-info"></i> About Us</router-link>
                         </el-menu-item>
-                        <el-menu-item index="5-2" class="menu-items">
+                        <el-menu-item index="5-2" class="menu-items" :style="isActive ? 'display:block;' : ''">
                             <router-link to="/delivery"><i class="el-icon-truck"></i> Delivery</router-link>
                         </el-menu-item>
-                        <el-menu-item index="5-3" class="menu-items">
+                        <el-menu-item index="5-3" class="menu-items" :style="isActive ? 'display:block;' : ''">
                             <router-link to="/payment"><i class="el-icon-coin"></i> Payment</router-link>
                         </el-menu-item>
                     </el-submenu>
