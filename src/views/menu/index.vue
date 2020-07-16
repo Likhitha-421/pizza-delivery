@@ -49,8 +49,8 @@
                     <el-dialog
                             :title="form.name"
                             :visible.sync="centerDialogVisible"
-                            width="60%"
-                            class="dialog-mobile"
+                            width="40%"
+                            class="dialog-mobile dialog-border"
                             center
                     >
                         <el-row>
@@ -279,9 +279,13 @@
     .size-select {
         margin: 15px 0 15px 0;
     }
+    .dialog-border >>> .el-dialog {
+        border-radius: 20px;
+    }
     @media only screen and (max-width: 600px) {
         .dialog-mobile >>> .el-dialog {
             width: 90% !important;
+            border-radius: 20px;
         }
     }
 </style>

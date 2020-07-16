@@ -42,7 +42,7 @@
                         <i class="el-icon-shopping-cart-2"></i> Cart
                         <b v-if="countItemsCart">| {{ countItemsCart }}</b>
                     </a>
-                    <a class="cart-button"><i class="el-icon-user"></i> Login</a>
+                    <a class="cart-button" @click="dialogLogin = true"><i class="el-icon-user"></i> Login</a>
                     <el-dropdown :hide-on-click="false" style="margin: 0 10px 0 10px;">
                       <span class="el-dropdown-link">
                         {{ selectedCurrency }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -61,7 +61,36 @@
                 </div>
             </el-menu>
         </div>
+        <el-dialog
+                title="Sign in"
+                :visible.sync="dialogLogin"
+                width="30%"
+                class="dialog-border"
+                :before-close="handleClose">
+            <br>
+            <div style="text-align: center;">
+                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+            </div>
+            <ul>
+                Why do I need to login:
+                <li>Save orders permanently</li>
+                <li>Remember your address so as not to indicate it next time</li>
+            </ul>
+            <br>
+            <el-form ref="form" :model="form" label-width="120px">
+                <el-form-item label="Your email">
+                    <el-input v-model="form.email"></el-input>
+                </el-form-item>
+                <el-form-item label="Code">
+                    <el-input v-model="form.otp"></el-input>
+                </el-form-item>
+            </el-form>
 
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -94,6 +123,11 @@
         },
         data () {
             return {
+                form: {
+                    email: '',
+                    otp: ''
+                },
+                dialogLogin: false,
                 isActive: false,
                 activeIndex: "2",
                 currencyList: ['USD', 'EUR']
@@ -194,5 +228,8 @@
                 float: right;
                 display: block;
             }*/
+        }
+        .dialog-border >>> .el-dialog {
+            border-radius: 20px;
         }
 </style>

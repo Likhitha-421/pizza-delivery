@@ -89,10 +89,10 @@
                     <h2><b>Total Cost:</b> {{ totalCost }} {{ selectedCurrency }}</h2><br><br>
                 </div>
 
-                <div style="margin: 0 5% 0 5%;">
+                <div>
                     <el-row>
                         <router-link to="/" class="left">
-                            <el-button type="primary" icon="el-icon-back"> Back</el-button>
+                            <el-button icon="el-icon-back"> Back</el-button>
                         </router-link>
                         &nbsp;&nbsp;
                         <el-button
@@ -172,7 +172,7 @@
             },
             subTotalPrice() {
                 let total = 0;
-                this.formOrder.items.forEach((item) => {
+                this.cartItems.forEach((item) => {
                     total += this.getCurrentPrice(item.prices) * item.qty;
                 });
                 return total
@@ -272,7 +272,7 @@
             width: 90%;
         }
     }
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 900px) {
         .step-cart {
             width: 90%;
         }

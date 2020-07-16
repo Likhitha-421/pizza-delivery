@@ -2,7 +2,8 @@ import Ls from '../../utils/ls'
 
 const state = {
   cartItems: JSON.parse(Ls.get('cart')) !== null &&  JSON.parse(Ls.get('cart')) !== undefined && Object.assign(JSON.parse(Ls.get('cart')), {}).length ? JSON.parse(Ls.get('cart')) : [],
-  cartCount: Ls.get('cartCount') && Ls.get('cartCount') !== 'NaN'  && Ls.get('cartCount') !== 'undefined' ? Ls.get('cartCount') : 0
+  cartCount: Ls.get('cartCount') && Ls.get('cartCount') !== 'NaN'  && Ls.get('cartCount') !== 'undefined' ? Ls.get('cartCount') : 0,
+  totalPrice: 0
 }
 
 const mutations = {
@@ -31,6 +32,16 @@ const mutations = {
       state.cartCount = itemsCount
       Ls.set('cartCount', itemsCount)
       Ls.set('cart', JSON.stringify(state.cartItems).toString())
+  },
+  UPDATE_PRICE: (state) => {
+      // count items
+      let itemsPrice = 0;
+      if (state.cartItems !== null && state.cartItems !== undefined && Object.assign(state.cartItems, {}).length) {
+          state.cartItems.forEach((item) => {
+              itemsPrice += item && item.qty ? item.qty : 0;
+          });
+      }
+      state.cartCount = itemsPrice
   }
 }
 
