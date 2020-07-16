@@ -26,6 +26,9 @@
 </script>
 
 <style scoped>
+    .el-carousel__item img {
+        opacity: 1;
+    }
     .slide-image {
         position: relative;
         box-shadow: rgba(115, 121, 140, 0.5) 0px 2px 10px -2px;
