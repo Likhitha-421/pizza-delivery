@@ -36,7 +36,6 @@
                     </el-submenu>
                 </template>
                 <div class="right-elements">
-
                     <a
                             class="cart-button"
                             @click="handleCart">

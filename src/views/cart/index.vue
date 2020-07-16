@@ -7,7 +7,7 @@
                 <h1>Your Cart</h1>
                 <br>
                 <p align="center">
-                    <el-steps :active="activeStep" style="width: 40%;">
+                    <el-steps :active="activeStep" class="step-cart">
                         <el-step title="Step 1" icon="el-icon-shopping-cart-full" description="Cart"></el-step>
                         <el-step title="Step 2" icon="el-icon-document-checked" description="Order"></el-step>
                         <el-step title="Step 3" icon="el-icon-truck" description="Delivery"></el-step>
@@ -248,7 +248,7 @@
         padding: 20px;
     }
     .cart-item {
-        width: 614px;
+        width: 50%;
         margin: 0px auto;
     }
     .cart-image {
@@ -263,5 +263,18 @@
     }
     .description {
         font-size: small;
+    }
+    .step-cart {
+        width: 50%;
+    }
+    @media screen and (max-width: 600px) {
+        .cart-item {
+            width: 90%;
+        }
+    }
+    @media screen and (max-width: 600px) {
+        .step-cart {
+            width: 90%;
+        }
     }
 </style>
