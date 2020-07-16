@@ -87,7 +87,7 @@
                                         <el-radio-button label="3">Big</el-radio-button>
                                     </el-radio-group>
                                     <br />
-                                    <el-input-number v-model="num" :step="2"></el-input-number>
+                                    <el-input-number v-model="num" :min="1" :step="1"></el-input-number>
                                     <p>
                                         <strong>Total price:</strong>
                                         {{ totalPrice }} &nbsp; {{ selectedCurrency }}
@@ -96,13 +96,13 @@
                             </el-col>
                         </el-row>
                         <span slot="footer" class="dialog-footer">
-              <el-button @click="centerDialogVisible = false">
-                <i class="el-icon-close" /> Cancel
-              </el-button>
-              <el-button type="primary" @click="confirmCart" :disabled="disableAddCart">
-                <i class="el-icon-plus" /> Add to Shopping Cart
-              </el-button>
-            </span>
+                          <el-button @click="centerDialogVisible = false">
+                            <i class="el-icon-close" /> Cancel
+                          </el-button>
+                          <el-button type="primary" @click="confirmCart" :disabled="disableAddCart">
+                            <i class="el-icon-plus" /> Add to Shopping Cart
+                          </el-button>
+                        </span>
                     </el-dialog>
                 </div>
             </el-col>
@@ -129,6 +129,7 @@
                 disableAddCart: false,
                 centerDialogVisible: false,
                 totalPrice: 0,
+                bufferForm: {},
                 form: {
                     id: "",
                     qty: 1,
@@ -150,6 +151,7 @@
         methods: {
             ...mapActions("cart", ["addToCart"]),
             handleSelect(item) {
+                this.bufferForm = this.form
                 this.form = item;
                 this.form.qty = 1;
                 this.centerDialogVisible = true;
@@ -179,7 +181,7 @@
                 });
                 setTimeout(() => (this.centerDialogVisible = false), 1500);
                 setTimeout(() => (this.disableAddCart = false), 1500);
-            }
+            },
         },
         watch: {
             form(value) {
@@ -190,6 +192,13 @@
             },
             num() {
                 this.form.qty = this.num;
+            },
+            centerDialogVisible(value) {
+                if (!value) {
+                    this.form = this.bufferForm
+                    this.totalPrice = 0,
+                    this.num = 1
+                }
             }
         }
     };

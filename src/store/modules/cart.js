@@ -1,8 +1,8 @@
 import Ls from '../../utils/ls'
 
 const state = {
-  cartItems: JSON.parse(Ls.get('cart')) !== null &&  JSON.parse(Ls.get('cart')) !== undefined && Object.assign(JSON.parse(Ls.get('cart')), {}).length ? JSON.parse(Ls.get('cart')) : [],
-  cartCount: Ls.get('cartCount') && Ls.get('cartCount') !== 'NaN'  && Ls.get('cartCount') !== 'undefined' ? Ls.get('cartCount') : 0,
+  cartItems: [],
+  cartCount: 0,
   totalPrice: 0
 }
 
@@ -22,6 +22,7 @@ const mutations = {
       state.cartCount = 0
   },
   UPDATE_COUNT: (state) => {
+      state.cartItems = JSON.parse(Ls.get('cart')) !== null &&  JSON.parse(Ls.get('cart')) !== undefined && Object.assign(JSON.parse(Ls.get('cart')), {}).length ? JSON.parse(Ls.get('cart')) : []
       // count items  
       let itemsCount = 0;
       if (state.cartItems !== null && state.cartItems !== undefined && Object.assign(state.cartItems, {}).length) {
@@ -31,7 +32,6 @@ const mutations = {
       }
       state.cartCount = itemsCount
       Ls.set('cartCount', itemsCount)
-      Ls.set('cart', JSON.stringify(state.cartItems).toString())
   },
   UPDATE_PRICE: (state) => {
       // count items
@@ -47,33 +47,34 @@ const mutations = {
 
 const actions = {
 
-  addToCart({ commit }, item) {
-      const indexItem = state.cartItems.findIndex(x => x.id === item.id)
+  async addToCart({ commit }, item) {
+      const indexItem = await state.cartItems.findIndex(x => x.id === item.id)
       if (Object.assign(state.cartItems, {}) && indexItem  > -1) {
           state.cartItems[indexItem].qty = state.cartItems[indexItem].qty + item.qty
-          commit('UPDATE_ITEMS', state.cartItems)
+          await commit('UPDATE_ITEMS', state.cartItems)
       } else {
-          commit('SET_ITEMS', item)
+          await commit('SET_ITEMS', item)
       }
 
-      commit('UPDATE_COUNT')
+      await commit('UPDATE_COUNT')
   },
   loadCart({ commit }) {
       commit('UPDATE_COUNT')
+      commit('UPDATE_PRICE')
   },
-  clearCart({ commit }) {
-      commit('CLEAR_CART')
+  async clearCart({ commit }) {
+      await commit('CLEAR_CART')
       commit('UPDATE_COUNT')
   },
-  removeItem({ commit }, item) {
-      const index = state.cartItems.findIndex(element => element.id === item)
+  async removeItem({ commit }, item) {
+      const index = await state.cartItems.findIndex(element => element.id === item)
       state.cartItems.splice(index, 1)
-      commit('UPDATE_ITEMS', state.cartItems)
+      await commit('UPDATE_ITEMS', state.cartItems)
       commit('UPDATE_COUNT')
   },
-  changeQty({ commit }, item) {
+  async changeQty({ commit }, item) {
       state.cartItems.find(x => x.id === item.id).qty = item.qty
-      commit('UPDATE_ITEMS', state.cartItems)
+      await commit('UPDATE_ITEMS', state.cartItems)
       commit('UPDATE_COUNT')
   }
 }

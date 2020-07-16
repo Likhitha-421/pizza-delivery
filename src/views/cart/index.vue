@@ -40,8 +40,8 @@
                             <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
                                 <el-input-number v-model="cartItems[cartItems.findIndex(x => x.id === item.id)].qty"
                                                  style="width: 130px;"
-                                                 @change="handleQty({ id: item.id, qty: cartItems[cartItems.findIndex(x => x.id === item.id)].qty })" :min="1" :max="15"
-                                >
+                                                 @change="handleQty({ id: item.id, qty: cartItems[cartItems.findIndex(x => x.id === item.id)].qty })"
+                                                 :min="1">
                                 </el-input-number>
                             </el-col>
                             <el-col :xs="24" :sm="24" :md="24" :lg="6" :xl="6">
