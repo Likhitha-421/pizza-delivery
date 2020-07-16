@@ -3,7 +3,7 @@ import { MessageBox, Message } from 'element-ui'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: 'https://api.pizza.achilov.dev/api/v1',
+  baseURL: 'http://task.dev.lc/api/v1',
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 17000 // request timeout
 })

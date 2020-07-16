@@ -31,6 +31,7 @@
           }
         },
         created () {
+            this.checkAuth()
             this.loadCurrency()
             this.loadCart()
         },
@@ -40,6 +41,9 @@
             ]),
             ...mapActions('cart', [
                 'loadCart'
+            ]),
+            ...mapActions('user', [
+                'checkAuth'
             ]),
         }
     }

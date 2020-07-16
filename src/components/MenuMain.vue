@@ -42,7 +42,19 @@
                         <i class="el-icon-shopping-cart-2"></i> Cart
                         <b v-if="countItemsCart">| {{ countItemsCart }}</b>
                     </a>
-                    <a class="cart-button" @click="dialogLogin = true"><i class="el-icon-user"></i> Login</a>
+                    <a v-if="!isAuthenticated" class="cart-button" @click="dialogLogin = true"><i class="el-icon-user"></i> Login</a>
+                    <el-popover
+                            v-if="isAuthenticated"
+                            placement="top"
+                            width="160"
+                            v-model="visibleLoginPopup">
+                        <p>Are you sure you want to logout?</p>
+                        <div style="text-align: right; margin: 0">
+                            <el-button size="mini" type="text" @click="visibleLoginPopup = false">Cancel</el-button>
+                            <el-button type="primary" size="mini" @click="handleLogout">Logout</el-button>
+                        </div>
+                        <a slot="reference" class="cart-button"><i class="el-icon-user"></i> {{ isAuthenticated && username ? username : 'Logout' }}</a>
+                    </el-popover>
                     <el-dropdown :hide-on-click="false" style="margin: 0 10px 0 10px;">
                       <span class="el-dropdown-link">
                         {{ selectedCurrency }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -62,6 +74,7 @@
             </el-menu>
         </div>
         <el-dialog
+                :appendToBody="true"
                 title="Sign in"
                 :visible.sync="dialogLogin"
                 width="30%"
@@ -72,23 +85,26 @@
                 <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
             </div>
             <ul>
-                Why do I need to login:
-                <li>Save orders permanently</li>
+                <b>Why do I need to login?</b>
+                <li>Save all orders</li>
                 <li>Remember your address so as not to indicate it next time</li>
             </ul>
             <br>
             <el-form ref="form" :model="form" label-width="120px">
-                <el-form-item label="Your email">
-                    <el-input v-model="form.email"></el-input>
+                <el-form-item v-if="!otpSent" label="Your email">
+                    <el-input type="email" v-model="form.email"></el-input>
                 </el-form-item>
-                <el-form-item label="Code">
-                    <el-input v-model="form.otp"></el-input>
+                <div v-if="otpSent" style="text-align: center; margin: 20px 0 20px 0;">{{ otpSentMessage }}</div>
+                <el-form-item v-if="otpSent" label="Code">
+                    <el-input type="password" v-model="form.otp"></el-input>
                 </el-form-item>
             </el-form>
 
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="dialogVisible = false">Confirm</el-button>
+                <el-button v-if="!otpSent" @click="dialogLogin = false">Cancel</el-button>
+                <el-button v-if="!otpSent" type="primary" @click="sendToEmail(form.email)">Send</el-button>
+                <el-button v-if="otpSent" @click="otpSent = false">Back</el-button>
+                <el-button v-if="otpSent" type="success" @click="handleCheckOtp(form.otp)">Confirm</el-button>
             </span>
         </el-dialog>
     </div>
@@ -96,6 +112,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
+    import { otpLogin } from '../api/user'
     export default {
         name: "MenuMain",
         methods: {
@@ -105,8 +122,18 @@
             ...mapActions('menu', [
                'loadMenu'
             ]),
+            ...mapActions('user', [
+               'authOtp', 'logout'
+            ]),
             handleCart() {
                 this.$router.push({ path: '/cart' })
+            },
+            handleLogout() {
+                this.logout()
+                this.visibleLoginPopup =false
+            },
+            handleClose() {
+                this.dialogLogin = false
             },
             handleSelect(key, keyPath) {
                 console.log(key, keyPath);
@@ -116,6 +143,36 @@
             },
             changeCurrency(currency) {
                 this.selectCurrency(currency)
+            },
+            async sendToEmail(email) {
+                await otpLogin(email).then(response => {
+                    const { message, code } = response
+                    this.$notify({
+                        title: 'Sent',
+                        message,
+                        type: 'success'
+                    })
+                    console.log(code)
+                    this.otpSent = true
+                    this.otpSentMessage = message
+                })
+            },
+            async handleCheckOtp(otp) {
+                await this.authOtp(otp)
+                if (this.isAuthenticated) {
+                    this.$notify({
+                        title: 'Login',
+                        message: 'You are successfully logged in system',
+                        type: 'success'
+                    })
+                } else {
+                    this.$notify({
+                        title: 'Login',
+                        message: 'Unauthenticated',
+                        type: 'error'
+                    })
+                }
+                setTimeout(() => (this.dialogLogin = false), 1000);
             }
         },
         created() {
@@ -123,6 +180,9 @@
         },
         data () {
             return {
+                otpSentMessage: '',
+                otpSent: false,
+                visibleLoginPopup: false,
                 form: {
                     email: '',
                     otp: ''
@@ -137,7 +197,9 @@
             ...mapGetters([
                 'cartCount',
                 'selectedCurrency',
-                'menuList'
+                'menuList',
+                'username',
+                'isAuthenticated'
             ]),
             countItemsCart()
             {
@@ -231,5 +293,6 @@
         }
         .dialog-border >>> .el-dialog {
             border-radius: 20px;
+            z-index: 3000;
         }
 </style>

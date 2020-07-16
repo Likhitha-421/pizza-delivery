@@ -177,8 +177,8 @@
                         "Congratulations! You have successfully added that item to your cart and ready to check out.",
                     type: "success"
                 });
-                setTimeout(() => (this.centerDialogVisible = false), 2000);
-                setTimeout(() => (this.disableAddCart = false), 2000);
+                setTimeout(() => (this.centerDialogVisible = false), 1500);
+                setTimeout(() => (this.disableAddCart = false), 1500);
             }
         },
         watch: {
