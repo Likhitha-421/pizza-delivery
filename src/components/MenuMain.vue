@@ -53,7 +53,7 @@
                             <el-button size="mini" type="text" @click="visibleLoginPopup = false">Cancel</el-button>
                             <el-button type="primary" size="mini" @click="handleLogout">Logout</el-button>
                         </div>
-                        <a slot="reference" class="cart-button"><i class="el-icon-user"></i> {{ isAuthenticated && username ? username : 'Logout' }}</a>
+                        <a slot="reference" class="cart-button"><i class="el-icon-user"></i> {{ isAuthenticated ? username : 'Logout' }}</a>
                     </el-popover>
                     <el-dropdown :hide-on-click="false" style="margin: 0 10px 0 10px;">
                       <span class="el-dropdown-link">
@@ -69,7 +69,9 @@
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
-                    <a href="#" class="icon-navbar" style="right: 15px; position: fixed; margin-left:5px; color: #ff6900;" @click="select()"><i style="font-size:23px;" :class="isActive ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i></a>
+                    <a href="#" class="icon-navbar" style="right: 15px; position: fixed; margin-left:5px; color: #ff6900;" @click="select()">
+                        <i style="font-size:23px;" :class="isActive ? 'el-icon-s-fold' : 'el-icon-s-unfold'"></i>
+                    </a>
                 </div>
             </el-menu>
         </div>
@@ -165,6 +167,7 @@
                         message: 'You are successfully logged in system',
                         type: 'success'
                     })
+                    setTimeout(() => (this.dialogLogin = false), 1000);
                 } else {
                     this.$notify({
                         title: 'Login',
@@ -172,7 +175,7 @@
                         type: 'error'
                     })
                 }
-                setTimeout(() => (this.dialogLogin = false), 1000);
+
             }
         },
         created() {

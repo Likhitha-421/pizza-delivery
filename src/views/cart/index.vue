@@ -230,7 +230,7 @@
                         this.activeStep = 2
                         this.clearCart()
                     }
-                    this.$router.push({ path: '/order?no=' + data.no })
+                    window.location.href = '/home/#/order?no=' + data.no
                 })
                 loading.close()
             }

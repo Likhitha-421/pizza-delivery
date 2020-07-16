@@ -1,6 +1,6 @@
 <template>
     <div style="min-height: 100vh; margin-top: 40px;">
-        <div  v-if="isDetail">
+        <div  v-if="isDetailPage">
             <div style="margin: 100px 0 25px 0;">
                 <div style="text-align: center; font-size: large;">
                     <br>
@@ -34,6 +34,15 @@
                     <div style="margin: 65px 0 25px 0; text-align: center;">
                         <h1>Your Orders</h1>
                     </div>
+                    <div style="margin: 65px 0 25px 0; text-align: center;">
+                        <span>Empty Orders</span>
+                        <br>
+                        <br>
+                        <img width="200" src="https://ucarecdn.com/49f469b7-b153-4198-9d4f-75b6bed1f8c4/order.png"/>
+                        <br>
+                        <br>
+                        <router-link to="/"><el-button>Back to home page</el-button></router-link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,7 +56,6 @@
         data () {
             return {
                 statusColor: '#16DC7B',
-                isDetail: false,
                 isOrderPage: false,
                 order: {
                     no: '',
@@ -59,8 +67,12 @@
         created () {
             if (this.$route.query && this.$route.query.no) {
                 this.order.no = this.$route.query.no
-                this.isDetail = true
                 this.checkOrder()
+            }
+        },
+        computed: {
+            isDetailPage() {
+                return this.$route.query && this.$route.query.no;
             }
         },
         methods: {
